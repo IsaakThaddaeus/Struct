@@ -1,0 +1,65 @@
+import { Vector2 } from './Vector2.js';
+import { Particle } from './Particle.js';
+import { DistanceConstraint } from './DistanceConstraint.js';
+import { Polygon } from './Polygon.js';
+
+export class Scene {
+
+    constructor() {
+        this.dt = 0.002;
+        this.substeps = 5;
+        this.dts = this.dt / this.substeps;
+        this.gravity = new Vector2(0, 9.8);
+        this.multiplier = 100;
+        this.mu = 0.4;
+
+        this.particles = [];
+        this.constraints = [];
+        this.collisionConstraints = [];
+        this.radius = 15;
+        this.mass = 1;
+
+
+        this.createBox2x2(300, 300, 50, 0);
+        this.createBox2x2(500, 300, 50, 0);
+        this.createRope(200, 200, 10, 30, 0);
+        this.particles[0].velocity = new Vector2(300, 0);
+
+    }
+
+    //Factories -----------------------------------------------------------------------------------------------------------------------------------------
+    createRope(x, y, number, space, stiffness = 0) {
+        const startIndex = this.particles.length;
+
+        for (let i = 0; i < number; i++) {
+
+            if (i === 0 || i === number - 1)
+                this.particles.push(new Particle(x + i * space, y, 0, this.radius, '#16B4F2'));
+            else
+                this.particles.push(new Particle(x + i * space, y, this.mass, this.radius, '#155FBF'));
+
+        }
+
+        for (let i = 0; i < number - 1; i++) {
+            const p1 = this.particles[startIndex + i];
+            const p2 = this.particles[startIndex + i + 1];
+            this.constraints.push(new DistanceConstraint(p1, p2, stiffness, this.dts));
+        }
+    }
+    createBox2x2(x, y, space, stiffness = 0) {
+        const startIndex = this.particles.length;
+        this.particles.push(new Particle(x, y, this.mass, this.radius));
+        this.particles.push(new Particle(x + space, y, this.mass, this.radius));
+        this.particles.push(new Particle(x, y + space, this.mass, this.radius));
+        this.particles.push(new Particle(x + space, y + space, this.mass, this.radius));
+
+        this.constraints.push(new DistanceConstraint(this.particles[startIndex], this.particles[startIndex + 1], stiffness, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[startIndex], this.particles[startIndex + 2], stiffness, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[startIndex + 1], this.particles[startIndex + 3], stiffness, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[startIndex + 2], this.particles[startIndex + 3], stiffness, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[startIndex], this.particles[startIndex + 3], stiffness, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[startIndex + 1], this.particles[startIndex + 2], stiffness, this.dts));
+    }
+
+
+}
