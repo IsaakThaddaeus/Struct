@@ -11,19 +11,42 @@ export class Scene {
         this.dts = this.dt / this.substeps;
         this.gravity = new Vector2(0, 9.8);
         this.multiplier = 100;
-        this.mu = 0.4;
+        this.mu = 0.3;
 
         this.particles = [];
         this.constraints = [];
         this.collisionConstraints = [];
+        this.polygons = [];
         this.radius = 15;
         this.mass = 1;
 
 
-        this.createBox2x2(300, 300, 50, 0);
-        this.createBox2x2(500, 300, 50, 0);
+        this.particles.push(new Particle(740, 100, 0, this.radius, '#155FBF'));
+        this.createBox2x2(900, 100, 50, 0);
+        this.createBox2x2(500, 250, 50, 0);
+        this.createBox2x2(700, 250, 50, 0);
+        this.createBox2x2(300, 250, 50, 0);
+        this.createBox2x2(300, 100, 50, 0);
+        this.createBox2x2(300, 400, 50, 0);
+        
+        
+
         this.createRope(200, 200, 10, 30, 0);
-        this.particles[0].velocity = new Vector2(300, 0);
+        
+
+
+        this.points = [
+            new Vector2(0, 0),
+            new Vector2(300, 0),
+            new Vector2(300, 300),
+            new Vector2(0, 300)
+        ];
+        this.polygons.push(new Polygon(new Vector2(200, 400), 30, this.points));
+        this.polygons.push(new Polygon(new Vector2(600, 400), -30, this.points));
+
+        this.constraints.push(new DistanceConstraint(this.particles[0], this.particles[1], 1, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[0], this.particles[5], 0.5, this.dts));
+        this.constraints.push(new DistanceConstraint(this.particles[0], this.particles[10], 0.1, this.dts));
 
     }
 
