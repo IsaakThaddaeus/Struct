@@ -50,18 +50,6 @@ function draw() {
       particle.velocity = particle.velocity.added(acceleration.scaled(dts * multiplier));
       particle.positionP = particle.positionX;
       particle.positionX = particle.positionX.added(particle.velocity.scaled(dts * multiplier));
-
-      /*
-      const cp = closestPointOnPolygon(particle.positionX, scene.polygons[0]);
-      if (cp.closestPoint) {
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        ctx.arc(cp.closestPoint.x, cp.closestPoint.y, 10, 0, Math.PI * 2);
-        ctx.fill();
-      }
-        */
-      
-
     }
 
     //Solve Constraints
@@ -145,8 +133,6 @@ function checkParticleCollision() {
   }
 }
 
-
-//Check Polygon Collision -----------------------------------------------------------------------------------------------------------------------------
 function checkPolygonCollision(particle) {
   for (let polygon of polygons) {
 
@@ -186,32 +172,6 @@ function checkPolygonCollision(particle) {
   }
 
 }
-function lineSegmentsIntersect(p1, p2, q1, q2) {
-  const r = p2.subtracted(p1);
-  const s = q2.subtracted(q1);
-
-  const crossRS = r.x * s.y - r.y * s.x;
-  const q1_p1 = q1.subtracted(p1);
-  const crossQ1P1R = q1_p1.x * r.y - q1_p1.y * r.x;
-
-  if (crossRS === 0) {
-    if (crossQ1P1R === 0) {
-      return null;
-    } else {
-      return null;
-    }
-  }
-
-  const t = (q1_p1.x * s.y - q1_p1.y * s.x) / crossRS;
-  const u = (q1_p1.x * r.y - q1_p1.y * r.x) / crossRS;
-
-  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-    const intersection = p1.added(r.scaled(t));
-    return intersection;
-  } else {
-    return null;
-  }
-}
 //https://wumbo.net/formulas/angle-between-two-vectors-2d/
 function pointInPolygon(point, polygon) {
   let totalAngle = 0;
@@ -248,6 +208,7 @@ function closestPointOnSegment(p, a, b) {
 
   return a.added(ab.scaled(t));
 }
+
 function closestPointOnPolygon(p, polygon) {
 
   let closestPoint = null;
@@ -272,6 +233,44 @@ function closestPointOnPolygon(p, polygon) {
 
   return { normal: normal, closestPoint: closestPoint };
 }
+
+function lineSegmentsIntersect(p1, p2, q1, q2) {
+  const r = p2.subtracted(p1);
+  const s = q2.subtracted(q1);
+
+  const crossRS = r.x * s.y - r.y * s.x;
+  const q1_p1 = q1.subtracted(p1);
+  const crossQ1P1R = q1_p1.x * r.y - q1_p1.y * r.x;
+
+  if (crossRS === 0) {
+    if (crossQ1P1R === 0) {
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  const t = (q1_p1.x * s.y - q1_p1.y * s.x) / crossRS;
+  const u = (q1_p1.x * r.y - q1_p1.y * r.x) / crossRS;
+
+  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+    const intersection = p1.added(r.scaled(t));
+    return intersection;
+  } else {
+    return null;
+  }
+}
+
+//Debugging -------------------------------------------------------------------------------------------------------------------------------------------
+/*
+const cp = closestPointOnPolygon(particle.positionX, scene.polygons[0]);
+if (cp.closestPoint) {
+  ctx.fillStyle = "red";
+  ctx.beginPath();
+  ctx.arc(cp.closestPoint.x, cp.closestPoint.y, 10, 0, Math.PI * 2);
+  ctx.fill();
+}
+  */
 
 
 
