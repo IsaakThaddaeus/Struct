@@ -160,6 +160,7 @@ function checkPolygonCollision(particle) {
       console.log(particle.positionX);
     }
 
+    /*
     else{
       for (let i = 0; i < polygon.transformedPoints.length; i++) {
         const p1 = polygon.transformedPoints[i];
@@ -180,7 +181,7 @@ function checkPolygonCollision(particle) {
         }
       }
     }
-
+    */
 
   }
 
