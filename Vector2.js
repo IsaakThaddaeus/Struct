@@ -31,7 +31,7 @@ export class Vector2 {
       return this;
     }
 
-    devide(scalar) {
+    divide(scalar) {
         this.x /= scalar;
         this.y /= scalar;
         return this;
@@ -61,7 +61,7 @@ export class Vector2 {
       return new Vector2(this.x * scalar, this.y * scalar);
     }
 
-    devided(scalar) {
+    divided(scalar) {
         return new Vector2(this.x / scalar, this.y / scalar);
       }
   

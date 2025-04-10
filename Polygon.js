@@ -7,21 +7,21 @@ export class Polygon {
         this.rotation = rotation;
         this.points = points;
         this.color = color;
-        this.transformedPoints = this.transfomPoints();
+        this.transformedPoints = this.transformPoints();
     }
 
     rotate(rotation) {
         this.rotation = rotation;
-        this.transformedPoints = this.transfomPoints();
+        this.transformedPoints = this.transformPoints();
     }
 
     translation(position) {
         this.position = position;
-        this.transformedPoints = this.transfomPoints();
+        this.transformedPoints = this.transformPoints();
     }
 
 
-    transfomPoints() {
+    transformPoints() {
         const transformedPoints = [];
         for (let point of this.points) {
 

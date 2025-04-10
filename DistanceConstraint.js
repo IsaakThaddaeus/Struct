@@ -1,6 +1,3 @@
-import { Vector2 } from './Vector2.js';
-import { Particle } from './Particle.js';
-
 export class DistanceConstraint {
 
     constructor(particleA, particleB, stiffness = 1, dts, color = '#F2B90F') {
