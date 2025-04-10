@@ -20,6 +20,7 @@ export function createSceneConfig() {
   createBox2x2(220, 300, 50);
   createBox2x2(700, 250, 50);
   createBox2x2(500, 100, 50);
+  createBox2x2(900, 200, 50);
   createRope(200, 200, 20, 30);
 
   const points = [
@@ -33,14 +34,14 @@ export function createSceneConfig() {
 
   constraints.push(new DistanceConstraint(particles[0], particles[1], 1, dts));
   constraints.push(new DistanceConstraint(particles[0], particles[5], 0.5, dts));
-  constraints.push(new DistanceConstraint(particles[9], particles[14], 0, dts));
+  constraints.push(new DistanceConstraint(particles[9], particles[14], 1, dts));
 
   return {
     dt: 0.002,
     substeps: 5,
     gravity: new Vector2(0, 9.81),
     multiplier: 100,
-    mu: 0.5,
+    mu: 0.3,
     radius,
     mass,
     particles,
