@@ -5,50 +5,6 @@ export class Vector2 {
     }
   
 
-    // ----- Muatating -----
-  
-    set(x, y) {
-      this.x = x;
-      this.y = y;
-      return this;
-    }
-  
-    add(v) {
-      this.x += v.x;
-      this.y += v.y;
-      return this;
-    }
-  
-    sub(v) {
-      this.x -= v.x;
-      this.y -= v.y;
-      return this;
-    }
-  
-    scale(scalar) {
-      this.x *= scalar;
-      this.y *= scalar;
-      return this;
-    }
-
-    divide(scalar) {
-        this.x /= scalar;
-        this.y /= scalar;
-        return this;
-      }
-  
-    normalize() {
-      const len = this.length();
-      if (len > 0) {
-        this.x /= len;
-        this.y /= len;
-      }
-      return this;
-    }
-  
-
-    // ----- Not-Mutating -----
-  
     added(v) {
       return new Vector2(this.x + v.x, this.y + v.y);
     }

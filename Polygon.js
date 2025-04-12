@@ -45,8 +45,4 @@ export class Polygon {
         ctx.fillStyle = this.color;
         ctx.fill();
     }
-
-
-
-
 }

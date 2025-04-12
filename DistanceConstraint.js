@@ -11,7 +11,7 @@ export class DistanceConstraint {
     solve() {
         const distance = this.particleB.positionX.subtracted(this.particleA.positionX).length();
         const c = distance - this.initialDistance;
-        const n = this.particleB.positionX.subtracted(this.particleA.positionX).normalize();
+        const n = this.particleB.positionX.subtracted(this.particleA.positionX).normalized();
         const lambda = c / (this.particleA.w + this.particleB.w + this.alpha);
 
         const correction = n.scaled(lambda);
