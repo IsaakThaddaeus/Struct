@@ -2,6 +2,7 @@
 import { Vector2 } from './Vector2.js';
 import { Particle } from './Particle.js';
 import { DistanceConstraint } from './DistanceConstraint.js';
+import { EnvironmentCollisionConstraint } from './EnvironmentCollisionConstraint.js';
 import { Polygon } from './Polygon.js';
 
 export class Config {
@@ -18,6 +19,7 @@ export class Config {
     this.particles = [];
     this.constraints = [];
     this.volumeConstraints = [];
+    this.environmentCollisionConstraints = [];
     this.polygons = [];
   }
 
@@ -31,6 +33,12 @@ export class Config {
     const dts = this.dt / this.substeps;
     const constraint = new DistanceConstraint(p1, p2, stiffness, dts);
     this.constraints.push(constraint);
+    return constraint;
+  }
+
+  addEnvironmentCollisionConstraint(particle, q, n) {
+    const constraint = new EnvironmentCollisionConstraint(particle, q, n, this.mu);
+    this.environmentCollisionConstraints.push(constraint);
     return constraint;
   }
 

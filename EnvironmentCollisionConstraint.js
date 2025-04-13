@@ -18,13 +18,10 @@ export class EnvironmentCollisionConstraint {
         const lambdaFric = -cFric;
 
         const limit = Math.abs(this.mu * lambdaColl);
-        const lambdaFricClamped = Math.max(-limit, Math.min(limit, lambdaFric)); //Somehow that shit works, have to look into it sometime
+        const lambdaFricClamped = Math.max(-limit, Math.min(limit, lambdaFric)); //Further investigation could help refine or optimize this method.
 
         this.particle.positionX = this.particle.positionX.added(this.n.scaled(lambdaColl));
         this.particle.positionX = this.particle.positionX.added(t.scaled(lambdaFricClamped));
     }
-
-
-
 
 }

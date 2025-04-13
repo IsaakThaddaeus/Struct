@@ -15,8 +15,6 @@ resizeCanvas();
 
 
 
-
-
 const config = SceneBuilder.buildDefaultScene(canvas);
 const xpbd = new XPBD(config);
 const editor = new Editor(config, canvas);

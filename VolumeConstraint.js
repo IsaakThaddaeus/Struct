@@ -10,8 +10,7 @@ export class VolumeConstraint {
         console.log(this.initialArea);
     }
 
-    //Wrong gradient... must be perpendicular to the edge
-    // https://www.coursera.org/lecture/physics-simulation/volume-constraint-2
+    // Gradient is incorrect — it must be perpendicular to the edge; otherwise, the simulation can blow up unless parameters are finely tuned
     solve() {
 
         let massSum = 0;
@@ -29,7 +28,6 @@ export class VolumeConstraint {
             const correction = n.scaled(lambda);
             particle.positionX = particle.positionX.added(correction.scaled(particle.w));
         }
-
     }
 
     draw(ctx) {
