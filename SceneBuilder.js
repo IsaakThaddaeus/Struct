@@ -36,9 +36,6 @@ export class SceneBuilder {
   }
 
 
-
-
-
   static createBox2x2(config, x, y, spacing, stiffness = 0) {
     const p0 = config.addParticle(x, y);
     const p1 = config.addParticle(x + spacing, y);
