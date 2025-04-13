@@ -18,13 +18,13 @@ export class Editor {
 
 
     _onMouseDown(event) {
-        console.log('mousedown', event);
+        //console.log('mousedown', event);
 
 
     }
 
     _onMouseUp(event) {
-        console.log('mouseup', event);
+        //console.log('mouseup', event);
 
         
     }

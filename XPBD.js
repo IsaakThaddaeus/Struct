@@ -17,10 +17,9 @@ export class XPBD {
     }
 
     render(ctx) {
-        const { polygons, constraints, particles } = this.config;
-        polygons.forEach(polygon => polygon.draw(ctx));
-        constraints.forEach(constraint => constraint.draw(ctx));
-        particles.forEach(particle => particle.draw(ctx));
+        this.config.polygons.forEach(polygon => polygon.draw(ctx));
+        this.config.constraints.forEach(constraint => constraint.draw(ctx));
+        this.config.particles.forEach(particle => particle.draw(ctx));
     }
 
     integrate() {
@@ -37,6 +36,7 @@ export class XPBD {
 
     solveConstraints() {
         this.config.constraints.forEach(constraint => constraint.solve());
+        this.config.volumeConstraints.forEach(constraint => constraint.solve());
     }
 
     updateVelocities() {
@@ -47,6 +47,7 @@ export class XPBD {
         }
     }
 
+    
     handleCollisions() {
         const { particles } = this.config;
         for (const particle of particles) {
@@ -106,7 +107,7 @@ export class XPBD {
         const { polygons, mu } = this.config;
 
         for (const polygon of polygons) {
-            if (this.pointInPolygon(particle.positionP, polygon)) {
+            if (this.pointInPolygon(particle.positionX, polygon)) {
                 const cp = this.closestPointOnPolygon(particle.positionP, polygon);
                 const constraint = new EnvironmentCollisionConstraint(particle, cp.closestPoint, cp.normal, mu);
                 constraint.solve();
