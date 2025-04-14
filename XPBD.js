@@ -17,12 +17,6 @@ export class XPBD {
         }
     }
 
-    render(ctx) {
-        this.config.polygons.forEach(polygon => polygon.draw(ctx));
-        this.config.constraints.forEach(constraint => constraint.draw(ctx));
-        this.config.particles.forEach(particle => particle.draw(ctx));
-    }
-
     integrate() {
         const { particles, gravity, dts, multiplier } = this.config;
 
