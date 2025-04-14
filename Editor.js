@@ -7,40 +7,55 @@ export class Editor {
         this.config = config;
         this.canvas = canvas;
 
-        this._initEventListeners();
+        this.initEventListeners();
     }
 
-    _initEventListeners() {
-       this.canvas.addEventListener('click', this._handleClick.bind(this));
-       this.canvas.addEventListener('mousedown', this._onMouseDown.bind(this));
-       this.canvas.addEventListener('mouseup', this._onMouseUp.bind(this));
+    initEventListeners() {
+        // Mouse events
+        this.canvas.addEventListener('click', this.handleClick.bind(this));
+        this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
+        this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
+
+        // Key press handling
+        window.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
 
-    _onMouseDown(event) {
+    onMouseDown(event) {
         //console.log('mousedown', event);
 
 
     }
 
-    _onMouseUp(event) {
+    onMouseUp(event) {
         //console.log('mouseup', event);
 
         
     }
 
-    
-    _handleClick(event) {
+    onKeyDown(event) {
+        if (event.code === 'Space') {
+            event.preventDefault();
+            this.config.paused = !this.config.paused;
+        }
+    }
+
+    handleClick(event) {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
         const particle = new Particle(x, y, this.config.mass, this.config.radius);
 
-        const vX = Math.random() * 50 - 25;
-        const vY = Math.random() * 50 - 25;
+        const vX = Math.random() * 10 - 5;
+        const vY = Math.random() * 10 - 5;
         particle.velocity = new Vector2(vX, vY);
         this.config.particles.push(particle);
+
+    }
+
+    edit() {
+
 
     }
 }

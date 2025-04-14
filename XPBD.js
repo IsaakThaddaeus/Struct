@@ -7,7 +7,9 @@ export class XPBD {
     }
 
     update() {
-        const { substeps } = this.config;
+        const { substeps, paused } = this.config;
+        if(paused) return;
+        
         for (let i = 0; i < substeps; i++) {
             this.integrate();
             this.solveConstraints();

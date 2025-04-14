@@ -7,6 +7,7 @@ import { Polygon } from './Polygon.js';
 
 export class Config {
   constructor() {
+    this.paused = false;
     this.dt = 0.002;
     this.substeps = 5;
     this.dts = this.dt / this.substeps;
