@@ -22,13 +22,13 @@ export class Editor {
 
 
     onMouseDown(event) {
-        //console.log('mousedown', event);
+        console.log('mousedown', event);
 
 
     }
 
     onMouseUp(event) {
-        //console.log('mouseup', event);
+        console.log('mouseup', event);
 
         
     }
