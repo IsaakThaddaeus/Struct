@@ -7,6 +7,7 @@ export class Editor {
         this.config = config;
         this.canvas = canvas;
 
+        this.selectedParticle = null;
         this.initEventListeners();
     }
 
@@ -22,15 +23,45 @@ export class Editor {
 
 
     onMouseDown(event) {
-        console.log('mousedown', event);
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const mousePos = new Vector2(x, y);
+
+        for (const particle of this.config.particles) {
+            const dist = particle.positionX.subtracted(mousePos).length();
+
+            if (dist < particle.radius) {
+                console.log('Particle clicked:', particle);
+                this.selectedParticle = particle;
+                return;
+            }
+        }
+
+        const particle = new Particle(x, y, this.config.mass, this.config.radius);
+        const vX = Math.random() * 10 - 5;
+        const vY = Math.random() * 10 - 5;
+        particle.velocity = new Vector2(vX, vY);
+        this.config.particles.push(particle);
 
 
     }
 
     onMouseUp(event) {
-        console.log('mouseup', event);
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const mousePos = new Vector2(x, y);
 
-        
+        for (const particle of this.config.particles) {
+            const dist = particle.positionX.subtracted(mousePos).length();
+
+            if (dist < particle.radius && this.selectedParticle) {
+                this.config.addDistanceConstraint(this.selectedParticle, particle, 0);
+            }
+        }
+
+        this.selectedParticle = null;
     }
 
     onKeyDown(event) {
@@ -41,21 +72,9 @@ export class Editor {
     }
 
     handleClick(event) {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        const particle = new Particle(x, y, this.config.mass, this.config.radius);
-
-        const vX = Math.random() * 10 - 5;
-        const vY = Math.random() * 10 - 5;
-        particle.velocity = new Vector2(vX, vY);
-        this.config.particles.push(particle);
-
     }
 
     edit() {
-
-
     }
+
 }
