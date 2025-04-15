@@ -12,17 +12,11 @@ export class Editor {
     }
 
     initEventListeners() {
-        // Mouse events
         this.canvas.addEventListener('click', this.handleClick.bind(this));
-        this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
-        this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
-
-        // Key press handling
         window.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
-
-    onMouseDown(event) {
+    handleClick(event) {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
@@ -32,35 +26,19 @@ export class Editor {
             const dist = particle.positionX.subtracted(mousePos).length();
 
             if (dist < particle.radius) {
-                console.log('Particle clicked:', particle);
-                this.selectedParticle = particle;
+                if (this.selectedParticle && this.selectedParticle !== particle) {
+                    this.config.addDistanceConstraint(this.selectedParticle, particle, 0);
+                    this.selectedParticle = null; 
+                } else {
+                    this.selectedParticle = particle; 
+                }
                 return;
             }
         }
 
         const particle = new Particle(x, y, this.config.mass, this.config.radius);
-        const vX = Math.random() * 10 - 5;
-        const vY = Math.random() * 10 - 5;
-        particle.velocity = new Vector2(vX, vY);
+        particle.velocity = new Vector2(Math.random() * 10 - 5, Math.random() * 10 - 5);
         this.config.particles.push(particle);
-
-
-    }
-
-    onMouseUp(event) {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        const mousePos = new Vector2(x, y);
-
-        for (const particle of this.config.particles) {
-            const dist = particle.positionX.subtracted(mousePos).length();
-
-            if (dist < particle.radius && this.selectedParticle) {
-                this.config.addDistanceConstraint(this.selectedParticle, particle, 0);
-            }
-        }
-
         this.selectedParticle = null;
     }
 
@@ -71,10 +49,5 @@ export class Editor {
         }
     }
 
-    handleClick(event) {
-    }
-
-    edit() {
-    }
-
+    edit() { }
 }
