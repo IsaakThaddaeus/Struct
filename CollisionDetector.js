@@ -1,5 +1,5 @@
 import { Vector2 } from './Vector2.js';
-import { EnvironmentCollisionConstraint } from './EnvironmentCollisionConstraint.js';
+import { EnvironmentCollisionConstraint } from './Constraints/EnvironmentCollisionConstraint.js';
 
 export class CollisionDetector {
     constructor(config) {
@@ -62,12 +62,12 @@ export class CollisionDetector {
     }
 
     checkPolygonCollision(particle) {
-        const { polygons, mu } = this.config;
+        const { polygons } = this.config;
 
         for (const polygon of polygons) {
             if (this.pointInPolygon(particle.positionX, polygon)) {
                 const cp = this.closestPointOnPolygon(particle.positionP, polygon);
-                if (!cp) continue;
+                if (!cp.normal || !cp.closestPoint) continue;
                 this.config.addEnvironmentCollisionConstraint(particle, cp.closestPoint, cp.normal);
             }
         }

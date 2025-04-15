@@ -1,8 +1,8 @@
 // Config.js
 import { Vector2 } from './Vector2.js';
 import { Particle } from './Particle.js';
-import { DistanceConstraint } from './DistanceConstraint.js';
-import { EnvironmentCollisionConstraint } from './EnvironmentCollisionConstraint.js';
+import { DistanceConstraint } from './Constraints/DistanceConstraint.js';
+import { EnvironmentCollisionConstraint } from './Constraints/EnvironmentCollisionConstraint.js';
 import { Polygon } from './Polygon.js';
 
 export class Config {

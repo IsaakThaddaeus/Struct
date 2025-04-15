@@ -1,7 +1,6 @@
 // SceneBuilder.js
 import { Config } from './Config.js';
 import { Vector2 } from './Vector2.js';
-import { VolumeConstraint } from './VolumeConstraint.js';
 
 
 export class SceneBuilder {

@@ -1,5 +1,5 @@
 import { Particle } from './Particle.js';
-import { DistanceConstraint } from './DistanceConstraint.js';
+import { DistanceConstraint } from './Constraints/DistanceConstraint.js';
 import { Vector2 } from './Vector2.js';
 
 export class Editor {
