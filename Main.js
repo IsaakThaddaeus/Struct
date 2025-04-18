@@ -8,13 +8,12 @@ const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-
-
 
 const config = SceneBuilder.buildDefaultScene(canvas);
 const xpbd = new XPBD(config);
@@ -30,3 +29,4 @@ function update() {
   requestAnimationFrame(update);
 }
 update();
+ 
