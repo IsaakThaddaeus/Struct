@@ -1,5 +1,6 @@
 import { Particle } from './Particle.js';
 import { DistanceConstraint } from './Constraints/DistanceConstraint.js';
+import { MouseDistanceConstraint } from './Constraints/MouseDistanceConstraint.js';
 import { Vector2 } from './Vector2.js';
 
 export class Editor {
@@ -9,6 +10,7 @@ export class Editor {
 
         this.mode = 'particle';
         this.selectedParticle = null;
+        this.dragging = false;
 
         this.initEventListeners();
         this.initButtonListeners();
@@ -93,18 +95,27 @@ export class Editor {
 
                 this.selectedParticle = null;
                 break;
-            
-            case 'drag':
 
+            case 'drag':
+                if (!this.dragging) {
+                    for (const particle of this.config.particles) {
+                        const dist = particle.positionX.subtracted(mousePos).length();
+
+                        if (dist < particle.radius) {
+                            this.selectedParticle = particle;
+                            this.dragging = true;
+                            const mouseConstraint = new MouseDistanceConstraint(particle, mousePos, 0.3, this.config.dts);
+                            this.config.mouseConstraints.push(mouseConstraint);
+                            return;
+                        }
+                    }
+                }
+
+                this.dragging = false;
+                this.selectedParticle = null;
+                this.config.mouseConstraints = [];
                 break;
 
-        }
-    }
-
-    onKeyDown(event) {
-        if (event.code === 'Space') {
-            event.preventDefault();
-            this.config.paused = !this.config.paused;
         }
     }
 
@@ -114,10 +125,21 @@ export class Editor {
         const y = event.clientY - rect.top;
         const mousePos = new Vector2(x, y);
 
-        
-
+        this.config.mouseConstraints.forEach(constraint => {
+            constraint.mousePos = mousePos;
+        });
     }
-    
+
+
+    onKeyDown(event) {
+        if (event.code === 'Space') {
+            event.preventDefault();
+            this.config.paused = !this.config.paused;
+        }
+    }
+
+
+
 
     edit() { }
 }

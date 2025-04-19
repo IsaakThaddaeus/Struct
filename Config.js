@@ -2,9 +2,10 @@
 import { Vector2 } from './Vector2.js';
 import { Particle } from './Particle.js';
 import { DistanceConstraint } from './Constraints/DistanceConstraint.js';
+import { MouseDistanceConstraint } from './Constraints/MouseDistanceConstraint.js';
 import { EnvironmentCollisionConstraint } from './Constraints/EnvironmentCollisionConstraint.js';
 import { Polygon } from './Polygon.js';
-import { VolumeConstraint } from './Constraints/VolumeConstraint.js'; // falls benötigt
+import { VolumeConstraint } from './Constraints/VolumeConstraint.js';
 
 export class Config {
   constructor() {
@@ -20,6 +21,7 @@ export class Config {
 
     this.particles = [];
     this.constraints = [];
+    this.mouseConstraints = [];
     this.volumeConstraints = [];
     this.environmentCollisionConstraints = [];
     this.polygons = [];
