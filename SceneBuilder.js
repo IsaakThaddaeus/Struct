@@ -43,7 +43,7 @@ export class SceneBuilder {
       new Vector2(300, 300),
       new Vector2(0, 300)
     ];
-    config.addPolygon(new Vector2(600, 400), -30, points);
+    config.addPolygon(new Vector2(25, 400), -30, points);
 
     return config;
   }
