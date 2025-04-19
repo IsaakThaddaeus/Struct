@@ -16,6 +16,7 @@ export class Editor {
 
     initEventListeners() {
         this.canvas.addEventListener('click', this.handleClick.bind(this));
+        this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         window.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
@@ -47,8 +48,6 @@ export class Editor {
 
             case 'fixedParticle':
                 this.config.addParticle(x, y, 0, this.config.radius, '#155FBF');
-
-            case 'drag':
                 break;
 
             case 'box':
@@ -65,7 +64,7 @@ export class Editor {
 
                     if (dist < particle.radius) {
                         if (this.selectedParticle && this.selectedParticle !== particle) {
-                            this.config.addDistanceConstraint(this.selectedParticle, particle, 0.5);
+                            this.config.addDistanceConstraint(this.selectedParticle, particle, 0.1);
                             this.selectedParticle = null;
                         } else {
                             this.selectedParticle = particle;
@@ -94,10 +93,13 @@ export class Editor {
 
                 this.selectedParticle = null;
                 break;
+            
+            case 'drag':
+
+                break;
 
         }
     }
-
 
     onKeyDown(event) {
         if (event.code === 'Space') {
@@ -105,6 +107,17 @@ export class Editor {
             this.config.paused = !this.config.paused;
         }
     }
+
+    handleMouseMove(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const mousePos = new Vector2(x, y);
+
+        
+
+    }
+    
 
     edit() { }
 }

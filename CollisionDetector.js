@@ -18,7 +18,7 @@ export class CollisionDetector {
     }
 
     // Solving collision constraints immediately upon detection improves simulation stability 
-    // compared to solving them all together at the end of the simulation step.
+    // compared to solving them all together at the end of the simulation sub-step.
     checkAndSolveParticleCollision(particleA) {
         const { particles, radius } = this.config;
 
