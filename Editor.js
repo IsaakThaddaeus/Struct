@@ -115,7 +115,6 @@ export class Editor {
                 this.selectedParticle = null;
                 this.config.mouseConstraints = [];
                 break;
-
         }
     }
 
