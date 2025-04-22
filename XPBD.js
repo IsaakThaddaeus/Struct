@@ -34,7 +34,7 @@ export class XPBD {
     solveConstraints() {
         this.config.constraints.forEach(constraint => constraint.solve());
         this.config.volumeConstraints.forEach(constraint => constraint.solve());
-        this.config.mouseConstraints.forEach(constraint => constraint.solve());
+        if(this.config.mouseConstraint) { this.config.mouseConstraint.solve(); }
     }
 
     solveCollisionConstraints() {

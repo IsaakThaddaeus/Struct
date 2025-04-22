@@ -10,7 +10,6 @@ export class Editor {
 
         this.mode = 'particle';
         this.selectedParticle = null;
-        this.dragging = false;
 
         this.initEventListeners();
         this.initButtonListeners();
@@ -97,23 +96,18 @@ export class Editor {
                 break;
 
             case 'drag':
-                if (!this.dragging) {
-                    for (const particle of this.config.particles) {
-                        const dist = particle.positionX.subtracted(mousePos).length();
+                for (const particle of this.config.particles) {
+                    const dist = particle.positionX.subtracted(mousePos).length();
 
-                        if (dist < particle.radius) {
-                            this.selectedParticle = particle;
-                            this.dragging = true;
-                            const mouseConstraint = new MouseDistanceConstraint(particle, mousePos, 0.3, this.config.dts);
-                            this.config.mouseConstraints.push(mouseConstraint);
-                            return;
-                        }
+                    if (dist < particle.radius) {
+                        this.selectedParticle = particle;
+                        this.config.mouseConstraint = new MouseDistanceConstraint(particle, mousePos, 0.3, this.config.dts);
+                        return;
                     }
                 }
 
-                this.dragging = false;
                 this.selectedParticle = null;
-                this.config.mouseConstraints = [];
+                this.config.mouseConstraint = null;
                 break;
         }
     }
@@ -123,12 +117,8 @@ export class Editor {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         const mousePos = new Vector2(x, y);
-
-        this.config.mouseConstraints.forEach(constraint => {
-            constraint.mousePos = mousePos;
-        });
+        if (this.config.mouseConstraint) { this.config.mouseConstraint.mousePos = mousePos; }
     }
-
 
     onKeyDown(event) {
         if (event.code === 'Space') {
@@ -137,8 +127,4 @@ export class Editor {
         }
     }
 
-
-
-
-    edit() { }
 }

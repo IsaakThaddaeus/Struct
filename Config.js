@@ -21,7 +21,7 @@ export class Config {
 
     this.particles = [];
     this.constraints = [];
-    this.mouseConstraints = [];
+    this.mouseConstraint = null;
     this.volumeConstraints = [];
     this.environmentCollisionConstraints = [];
     this.polygons = [];
