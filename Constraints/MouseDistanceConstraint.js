@@ -2,17 +2,19 @@ import { Vector2 } from '../Vector2.js';
 
 export class MouseDistanceConstraint {
 
-    constructor(particleA, mousePos, stiffness = 1, dts, color = '#F2B90F') {
+    constructor(particleA, mousePos, stiffness = 1, config, color = '#F2B90F') {
         this.particleA = particleA;
         this.mousePos = mousePos;
-        this.alpha = stiffness / dts; //Account for devide infinite
+        this.stiffness = stiffness;
+        this.config = config;
         this.color = color;
     }
 
     solve() {
         const c = this.mousePos.subtracted(this.particleA.positionX).length();
         const n = this.mousePos.subtracted(this.particleA.positionX).normalized();
-        const lambda = c / this.alpha;
+        const alpha = this.stiffness / this.config.dts; 
+        const lambda = c / alpha;
 
         const correction = n.scaled(lambda);
         if (this.particleA.w !== 0)

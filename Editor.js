@@ -101,7 +101,7 @@ export class Editor {
 
                     if (dist < particle.radius) {
                         this.selectedParticle = particle;
-                        this.config.addMouseDistanceConstraint(particle, mousePos, 0.3,);
+                        this.config.addMouseDistanceConstraint(particle, mousePos, 0.3);
                         return;
                     }
                 }

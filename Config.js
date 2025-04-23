@@ -21,7 +21,6 @@ export class Config {
     this.particles = [];
     this.constraints = [];
     this.mouseConstraint = null;
-    this.volumeConstraints = [];
     this.environmentCollisionConstraints = [];
     this.polygons = [];
   }
@@ -33,13 +32,13 @@ export class Config {
   }
 
   addDistanceConstraint(p1, p2, stiffness, color) {
-    const constraint = new DistanceConstraint(p1, p2, stiffness, this.dts, color);
+    const constraint = new DistanceConstraint(p1, p2, stiffness, this, color);
     this.constraints.push(constraint);
     return constraint;
   }
 
   addMouseDistanceConstraint(particle, mousePos, stiffness, color) {
-    const constraint = new MouseDistanceConstraint(particle, mousePos, stiffness, this.dts, color);
+    const constraint = new MouseDistanceConstraint(particle, mousePos, stiffness, this, color);
     this.mouseConstraint = constraint;
     return constraint;
   }
@@ -58,6 +57,11 @@ export class Config {
 
   setCanvas(canvas) {
     this.canvas = canvas;
+  }
+
+  setDts(numSubsteps) {
+    this.substeps = numSubsteps;
+    this.dts = this.dt / this.substeps;
   }
 
 
@@ -116,27 +120,5 @@ export class Config {
     }
   }
 
-  createBalloon(x, y, radius = 50, segments = 5, stiffness = 0) {
-    const balloonParticles = [];
-
-    for (let i = 0; i < segments; i++) {
-      const angle = (i / segments) * Math.PI * 2;
-      const px = x + Math.cos(angle) * radius;
-      const py = y + Math.sin(angle) * radius;
-      const p = this.addParticle(px, py, this.mass, this.radius, '#16B4F2');
-      balloonParticles.push(p);
-    }
-
-    const volumeConstraint = new VolumeConstraint(balloonParticles, 0.1, this.dts);
-    this.volumeConstraints.push(volumeConstraint);
-
-    for (let i = 0; i < segments; i++) {
-      const p1 = balloonParticles[i];
-      const p2 = balloonParticles[(i + 1) % segments];
-      this.addDistanceConstraint(p1, p2, stiffness);
-    }
-
-    return balloonParticles;
-  }
 
 }
