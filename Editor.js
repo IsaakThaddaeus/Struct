@@ -48,7 +48,7 @@ export class Editor {
                 break;
 
             case 'fixedParticle':
-                this.config.addParticle(x, y, 0, this.config.radius, '#155FBF');
+                this.config.addParticle(x, y, 0, undefined, '#155FBF');
                 break;
 
             case 'box':
@@ -101,7 +101,7 @@ export class Editor {
 
                     if (dist < particle.radius) {
                         this.selectedParticle = particle;
-                        this.config.mouseConstraint = new MouseDistanceConstraint(particle, mousePos, 0.3, this.config.dts);
+                        this.config.addMouseDistanceConstraint(particle, mousePos, 0.3,);
                         return;
                     }
                 }

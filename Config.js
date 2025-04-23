@@ -17,7 +17,6 @@ export class Config {
     this.multiplier = 100;
     this.mu = 0.5;
     this.radius = 15;
-    this.mass = 1;
 
     this.particles = [];
     this.constraints = [];
@@ -27,16 +26,21 @@ export class Config {
     this.polygons = [];
   }
 
-  addParticle(x, y, mass = this.mass, radius = this.radius, color = '#D91424') {
+  addParticle(x, y, mass, radius, color) {
     const particle = new Particle(x, y, mass, radius, color);
     this.particles.push(particle);
     return particle;
   }
 
-  addDistanceConstraint(p1, p2, stiffness = 1) {
-    const dts = this.dt / this.substeps;
-    const constraint = new DistanceConstraint(p1, p2, stiffness, dts);
+  addDistanceConstraint(p1, p2, stiffness, color) {
+    const constraint = new DistanceConstraint(p1, p2, stiffness, this.dts, color);
     this.constraints.push(constraint);
+    return constraint;
+  }
+
+  addMouseDistanceConstraint(particle, mousePos, stiffness, color) {
+    const constraint = new MouseDistanceConstraint(particle, mousePos, stiffness, this.dts, color);
+    this.mouseConstraint = constraint;
     return constraint;
   }
 
@@ -46,7 +50,7 @@ export class Config {
     return constraint;
   }
 
-  addPolygon(position, rotation, points, color = '#F2A30F') {
+  addPolygon(position, rotation, points, color) {
     const polygon = new Polygon(position, rotation, points, color);
     this.polygons.push(polygon);
     return polygon;

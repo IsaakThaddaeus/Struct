@@ -2,7 +2,7 @@ import { Vector2 } from './Vector2.js';
 
 export class Polygon {
 
-    constructor(position, rotation, points = [], color = '#F2A30F') {
+    constructor(position, rotation = 0, points = [], color = '#F2A30F') {
         this.position = position;
         this.rotation = rotation;
         this.points = points;
