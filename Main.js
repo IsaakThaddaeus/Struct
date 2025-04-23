@@ -21,11 +21,22 @@ const xpbd = new XPBD(config);
 const editor = new Editor(config, canvas);
 const renderer = new Renderer(config);
 
-function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+let lastTime = performance.now();
 
+function update() {
+  const now = performance.now();
+  const delta = now - lastTime; 
+  console.log(delta / 1000);          
+  lastTime = now;
+  const fps = 1000 / delta;   
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   xpbd.update();
   renderer.render(ctx);
+
+  ctx.fillStyle = 'black';
+  ctx.font = '16px Arial';
+  ctx.fillText(`FPS: ${fps.toFixed(1)}`, 10, 20);
   
   requestAnimationFrame(update);
 }
