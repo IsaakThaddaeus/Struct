@@ -25,12 +25,14 @@ export class CollisionDetector {
         for (const particleB of particles) {
             if (particleA === particleB) continue;
 
+            const radii = particleA.radius + particleB.radius;
             const d = particleB.positionX.subtracted(particleA.positionX);
             const dist = d.length();
 
-            if (dist < radius * 2) {
+            if (dist < radii) {
                 const n = d.normalized();
-                const c = dist - radius * 2;
+                
+                const c = dist - radii;
                 const lambda = c / (particleA.w + particleB.w);
                 const correction = n.scaled(lambda);
                 particleA.positionX = particleA.positionX.added(correction.scaled(particleA.w));
