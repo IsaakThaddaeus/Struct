@@ -25,8 +25,7 @@ let lastTime = performance.now();
 
 function update() {
   const now = performance.now();
-  const delta = now - lastTime; 
-  console.log(delta / 1000);          
+  const delta = now - lastTime;      
   lastTime = now;
   const fps = 1000 / delta;   
 

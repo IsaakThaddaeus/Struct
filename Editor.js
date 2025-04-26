@@ -13,6 +13,7 @@ export class Editor {
 
         this.initEventListeners();
         this.initButtonListeners();
+        this.initInputs();
     }
 
     initEventListeners() {
@@ -30,6 +31,32 @@ export class Editor {
         document.getElementById('btn-rod').addEventListener('click', () => this.setMode('rod'));
         document.getElementById('btn-spring').addEventListener('click', () => this.setMode('spring'));
     }
+
+    initInputs() {
+        this.inputSubsteps = document.getElementById('substeps');
+        this.inputGravity = document.getElementById('gravity');
+
+        this.inputSubsteps.value = this.config.substeps;
+        this.inputGravity.value = this.config.gravity.y.toFixed(2);
+
+        this.inputSubsteps.addEventListener('input', () => this.updateSubsteps());
+        this.inputGravity.addEventListener('input', () => this.updateGravity());
+    }
+
+    updateSubsteps() {
+        const value = parseInt(this.inputSubsteps.value);
+        if (!isNaN(value) && value > 0) {
+            this.config.setDts(value);
+        }
+    }
+
+    updateGravity() {
+        const value = parseFloat(this.inputGravity.value);
+        if (!isNaN(value)) {
+            this.config.gravity.y = value;
+        }
+    }
+
 
     setMode(mode) {
         this.mode = mode;
@@ -60,56 +87,46 @@ export class Editor {
                 break;
 
             case 'spring':
-                for (const particle of this.config.particles) {
-                    const dist = particle.positionX.subtracted(mousePos).length();
-
-                    if (dist < particle.radius) {
-                        if (this.selectedParticle && this.selectedParticle !== particle) {
-                            this.config.addDistanceConstraint(this.selectedParticle, particle, 0.1);
-                            this.selectedParticle = null;
-                        } else {
-                            this.selectedParticle = particle;
-                        }
-                        return;
-                    }
-                }
-
-                this.selectedParticle = null;
+                this.handleConstraintClick(mousePos, 0.1);
                 break;
 
             case 'rod':
-                for (const particle of this.config.particles) {
-                    const dist = particle.positionX.subtracted(mousePos).length();
-
-                    if (dist < particle.radius) {
-                        if (this.selectedParticle && this.selectedParticle !== particle) {
-                            this.config.addDistanceConstraint(this.selectedParticle, particle, 0);
-                            this.selectedParticle = null;
-                        } else {
-                            this.selectedParticle = particle;
-                        }
-                        return;
-                    }
-                }
-
-                this.selectedParticle = null;
+                this.handleConstraintClick(mousePos, 0);
                 break;
 
             case 'drag':
-                for (const particle of this.config.particles) {
-                    const dist = particle.positionX.subtracted(mousePos).length();
-
-                    if (dist < particle.radius) {
-                        this.selectedParticle = particle;
-                        this.config.addMouseDistanceConstraint(particle, mousePos, 0.3);
-                        return;
-                    }
-                }
-
-                this.selectedParticle = null;
-                this.config.mouseConstraint = null;
+                this.handleDragClick(mousePos);
                 break;
         }
+    }
+
+    handleConstraintClick(mousePos, stiffness) {
+        for (const particle of this.config.particles) {
+            const dist = particle.positionX.subtracted(mousePos).length();
+            if (dist < particle.radius) {
+                if (this.selectedParticle && this.selectedParticle !== particle) {
+                    this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness);
+                    this.selectedParticle = null;
+                } else {
+                    this.selectedParticle = particle;
+                }
+                return;
+            }
+        }
+        this.selectedParticle = null;
+    }
+
+    handleDragClick(mousePos) {
+        for (const particle of this.config.particles) {
+            const dist = particle.positionX.subtracted(mousePos).length();
+            if (dist < particle.radius) {
+                this.selectedParticle = particle;
+                this.config.addMouseDistanceConstraint(particle, mousePos, 0.3);
+                return;
+            }
+        }
+        this.selectedParticle = null;
+        this.config.mouseConstraint = null;
     }
 
     handleMouseMove(event) {
@@ -117,7 +134,10 @@ export class Editor {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         const mousePos = new Vector2(x, y);
-        if (this.config.mouseConstraint) { this.config.mouseConstraint.mousePos = mousePos; }
+
+        if (this.config.mouseConstraint) {
+            this.config.mouseConstraint.mousePos = mousePos;
+        }
     }
 
     onKeyDown(event) {
@@ -126,5 +146,4 @@ export class Editor {
             this.config.paused = !this.config.paused;
         }
     }
-
 }

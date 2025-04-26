@@ -6,7 +6,6 @@
   <title>Struct</title>
   <link rel="stylesheet" href="css.css" />
   <link rel="icon" type="image/png" href="Images/icon.png?v=1" />
-
 </head>
 <body>
   <div id="app">
@@ -23,13 +22,29 @@
       <button id="btn-wheel">Wheel</button>
       <button id="btn-rod">Rod</button>
       <button id="btn-spring">Spring</button>
-      
     </aside>
     
-    <canvas id="simulationCanvas"></canvas>
+    <div id="canvas-container">
+      <canvas id="simulationCanvas"></canvas>
+    </div>
+    
+<aside id="properties-sidebar">
+
+  <div class="input-group">
+    <label for="substeps">Substeps:</label>
+    <input id="substeps" type="text"/>
+  </div>
+
+  <div class="input-group">
+    <label for="gravity">Gravity:</label>
+    <input id="gravity" type="text"/>
+  </div>
+
+
+</aside>
+
   </div>
 
   <script type="module" src="Main.js"></script>
 </body>
-
 </html>
