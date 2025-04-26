@@ -1,5 +1,6 @@
 import { Vector2 } from './Vector2.js';
 import { EnvironmentCollisionConstraint } from './Constraints/EnvironmentCollisionConstraint.js';
+import { ParticleCollisionConstraint } from './Constraints/ParticleCollisionConstraint.js';
 
 export class CollisionDetector {
     constructor(config) {
@@ -20,47 +21,24 @@ export class CollisionDetector {
     // Solving collision constraints immediately upon detection improves simulation stability 
     // compared to solving them all together at the end of the simulation sub-step.
     checkAndSolveParticleCollision(particleA) {
-        const { particles, radius } = this.config;
-
+        const { particles, muSp, muKp } = this.config;
+    
         for (const particleB of particles) {
-            if (particleA === particleB) continue;
+          if (particleA === particleB) continue;
+    
+          // Vector from A to B and current distance
+          const delta = particleB.positionX.subtracted(particleA.positionX);
+          const dist = delta.length();
+          if (dist === 0) continue;  // Prevent division by zero
+    
+          // Compute penetration depth
+          const radiiSum = particleA.radius + particleB.radius;
+          const penetration = radiiSum - dist;
+          if (penetration <= 0) continue;  // No overlap
+    
+          const normal = delta.divided(dist);
+          new ParticleCollisionConstraint(particleA, particleB, normal, penetration, muSp, muKp).solve();
 
-            const d = particleB.positionX.subtracted(particleA.positionX);
-            const dist = d.length();
-            if (dist === 0) continue;                  
-
-
-            const radii = particleA.radius + particleB.radius;
-            const penetration = radii - dist;
-            if (penetration <= 0) continue;             
-
-            const n = d.normalized();                
-            const t = new Vector2(-n.y, n.x);         
-
-            const invSum = particleA.w + particleB.w;   
-            const corrN = n.scaled(penetration / invSum);
-            particleA.positionX = particleA.positionX.subtracted(corrN.scaled(particleA.w));
-            particleB.positionX = particleB.positionX.added(corrN.scaled(particleB.w));
-
-            const DeltaA = particleA.positionX.subtracted(particleA.positionP);
-            const DeltaB = particleB.positionX.subtracted(particleB.positionP);
-            const relTan = t.dot(DeltaA.subtracted(DeltaB));    
-            const absTan = Math.abs(relTan);
-
-
-            const muS = this.config.muSp;                      
-            const muK = this.config.muKp;                      
-            let fricMag;
-            if (absTan < muS * penetration) {
-                fricMag = -relTan;
-            } else {
-                fricMag = -Math.sign(relTan) * muK * penetration;
-            }
-
-            const dispF = t.scaled(fricMag);
-            const corrT = dispF.divided(invSum);
-            particleA.positionX = particleA.positionX.added(corrT.scaled(particleA.w));
-            particleB.positionX = particleB.positionX.subtracted(corrT.scaled(particleB.w));
         }
     }
 

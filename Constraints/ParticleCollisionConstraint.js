@@ -1,27 +1,49 @@
 import { Vector2 } from '../Vector2.js';
 
 export class ParticleCollisionConstraint {
-
-    constructor(particle, q, n, mu) {
-        this.particle = particle;
-        this.q = q;
+    constructor(particleA, particleB, n, penetration, muS, muK) {
+        this.particleA = particleA;
+        this.particleB = particleB;
         this.n = n;
-        this.mu = mu;
+        this.penetration = penetration;
+        this.muS = muS;
+        this.muK = muK;
     }
 
     solve() {
-        const t = new Vector2(-this.n.y, this.n.x);
-        const difference = this.particle.positionX.subtracted(this.q);
-        const cColl = this.n.dot(difference);
-        const cFric = t.dot(difference);
-        const lambdaColl = -cColl;
-        const lambdaFric = -cFric;
+        const { particleA, particleB, n, penetration, muS, muK } = this;
 
-        const limit = Math.abs(this.mu * lambdaColl);
-        const lambdaFricClamped = Math.max(-limit, Math.min(limit, lambdaFric)); //Further investigation could help refine or optimize this method.
+        // 1) Tangential unit vector
+        const t = new Vector2(-n.y, n.x);
 
-        this.particle.positionX = this.particle.positionX.added(this.n.scaled(lambdaColl));
-        this.particle.positionX = this.particle.positionX.added(t.scaled(lambdaFricClamped));
+        // 2) Normal correction
+        const invSum = particleA.w + particleB.w;
+        if (invSum === 0) return; // Both are immovable
+
+        const normalCorrection = n.scaled(penetration / invSum);
+        particleA.positionX = particleA.positionX.subtracted(normalCorrection.scaled(particleA.w));
+        particleB.positionX = particleB.positionX.added(normalCorrection.scaled(particleB.w));
+
+        // 3) Relative tangential motion since last step
+        const deltaA = particleA.positionX.subtracted(particleA.positionP);
+        const deltaB = particleB.positionX.subtracted(particleB.positionP);
+        const relTan = t.dot(deltaA.subtracted(deltaB));
+        const absTan = Math.abs(relTan);
+
+        // 4) Friction magnitude (static vs kinetic)
+        let fricMag;
+        if (absTan < muS * penetration) {
+            // Static friction: exactly oppose tangential motion
+            fricMag = -relTan;
+        } else {
+            // Kinetic friction: cap at muK * penetration
+            fricMag = -Math.sign(relTan) * muK * penetration;
+        }
+
+        // 5) Apply friction correction
+        const frictionCorrection = t.scaled(fricMag / invSum);
+        particleA.positionX = particleA.positionX.added(frictionCorrection.scaled(particleA.w));
+        particleB.positionX = particleB.positionX.subtracted(frictionCorrection.scaled(particleB.w));
     }
 
 }
