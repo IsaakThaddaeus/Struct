@@ -16,6 +16,8 @@ export class Config {
     this.gravity = new Vector2(0, 9.81);
     this.multiplier = 100;
     this.mu = 0.5;
+    this.muSp = 0.5;
+    this.muKp = 0.3;
 
     this.particles = [];
     this.constraints = [];

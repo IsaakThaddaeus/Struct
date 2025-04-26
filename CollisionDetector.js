@@ -25,19 +25,42 @@ export class CollisionDetector {
         for (const particleB of particles) {
             if (particleA === particleB) continue;
 
-            const radii = particleA.radius + particleB.radius;
             const d = particleB.positionX.subtracted(particleA.positionX);
             const dist = d.length();
+            if (dist === 0) continue;                  
 
-            if (dist < radii) {
-                const n = d.normalized();
-                
-                const c = dist - radii;
-                const lambda = c / (particleA.w + particleB.w);
-                const correction = n.scaled(lambda);
-                particleA.positionX = particleA.positionX.added(correction.scaled(particleA.w));
-                particleB.positionX = particleB.positionX.subtracted(correction.scaled(particleB.w));
+
+            const radii = particleA.radius + particleB.radius;
+            const penetration = radii - dist;
+            if (penetration <= 0) continue;             
+
+            const n = d.normalized();                
+            const t = new Vector2(-n.y, n.x);         
+
+            const invSum = particleA.w + particleB.w;   
+            const corrN = n.scaled(penetration / invSum);
+            particleA.positionX = particleA.positionX.subtracted(corrN.scaled(particleA.w));
+            particleB.positionX = particleB.positionX.added(corrN.scaled(particleB.w));
+
+            const DeltaA = particleA.positionX.subtracted(particleA.positionP);
+            const DeltaB = particleB.positionX.subtracted(particleB.positionP);
+            const relTan = t.dot(DeltaA.subtracted(DeltaB));    
+            const absTan = Math.abs(relTan);
+
+
+            const muS = this.config.muSp;                      
+            const muK = this.config.muKp;                      
+            let fricMag;
+            if (absTan < muS * penetration) {
+                fricMag = -relTan;
+            } else {
+                fricMag = -Math.sign(relTan) * muK * penetration;
             }
+
+            const dispF = t.scaled(fricMag);
+            const corrT = dispF.divided(invSum);
+            particleA.positionX = particleA.positionX.added(corrT.scaled(particleA.w));
+            particleB.positionX = particleB.positionX.subtracted(corrT.scaled(particleB.w));
         }
     }
 
