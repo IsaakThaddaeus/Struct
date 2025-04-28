@@ -11,11 +11,12 @@ export class Config {
   constructor() {
     this.canvas = null;
     this.paused = false;
-    this.dt = 0.002;
-    this.substeps = 5;
+    this.dt = 0.0166;
+    this.substeps = 10;
     this.dts = this.dt / this.substeps;
+    this.dts2 = this.dts * this.dts;
     this.gravity = new Vector2(0, 9.81);
-    this.multiplier = 100;
+    this.multiplier = 15;
     this.mu = 0.5;
     this.muSp = 0.5;
     this.muKp = 0.3;
@@ -33,8 +34,8 @@ export class Config {
     return particle;
   }
 
-  addDistanceConstraint(p1, p2, stiffness, color) {
-    const constraint = new DistanceConstraint(p1, p2, stiffness, this, color);
+  addDistanceConstraint(p1, p2, stiffness, damping, color) {
+    const constraint = new DistanceConstraint(p1, p2, stiffness, damping, this, color);
     this.constraints.push(constraint);
     return constraint;
   }
@@ -64,6 +65,7 @@ export class Config {
   setDts(numSubsteps) {
     this.substeps = numSubsteps;
     this.dts = this.dt / this.substeps;
+    this.dts2 = this.dts * this.dts;
   }
 
 

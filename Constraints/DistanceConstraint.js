@@ -1,10 +1,11 @@
 export class DistanceConstraint {
 
-    constructor(particleA, particleB, stiffness = 1, config, color = '#F2B90F') {
+    constructor(particleA, particleB, stiffness = 1, damping, config, color = '#F2B90F') {
         this.particleA = particleA;
         this.particleB = particleB;
         this.initialDistance = particleB.positionX.subtracted(particleA.positionX).length();
         this.stiffness = stiffness;
+        this.damping = damping;
         this.config = config;
         this.color = color;
     }
