@@ -4,9 +4,8 @@ import { MouseDistanceConstraint } from './Constraints/MouseDistanceConstraint.j
 import { Vector2 } from './Vector2.js';
 
 export class Editor {
-    constructor(config, canvas) {
+    constructor(config) {
         this.config = config;
-        this.canvas = canvas;
 
         this.mode = 'particle';
         this.selectedParticle = null;
@@ -17,8 +16,8 @@ export class Editor {
     }
 
     initEventListeners() {
-        this.canvas.addEventListener('click', this.handleClick.bind(this));
-        this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
+        this.config.canvas.addEventListener('click', this.handleClick.bind(this));
+        this.config.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         window.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
@@ -64,7 +63,7 @@ export class Editor {
     }
 
     handleClick(event) {
-        const rect = this.canvas.getBoundingClientRect();
+        const rect = this.config.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         const mousePos = new Vector2(x, y);
@@ -130,7 +129,7 @@ export class Editor {
     }
 
     handleMouseMove(event) {
-        const rect = this.canvas.getBoundingClientRect();
+        const rect = this.config.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         const mousePos = new Vector2(x, y);

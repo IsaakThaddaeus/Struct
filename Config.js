@@ -9,6 +9,7 @@ import { VolumeConstraint } from './Constraints/VolumeConstraint.js';
 
 export class Config {
   constructor() {
+    this.canvas = null;
     this.paused = false;
     this.dt = 0.002;
     this.substeps = 5;

@@ -18,7 +18,7 @@ resizeCanvas();
 //const config = SceneBuilder.buildDefaultScene(canvas);
 const config = SceneBuilder.buildEmptyScene(canvas);
 const xpbd = new XPBD(config);
-const editor = new Editor(config, canvas);
+const editor = new Editor(config);
 const renderer = new Renderer(config);
 
 let lastTime = performance.now();
