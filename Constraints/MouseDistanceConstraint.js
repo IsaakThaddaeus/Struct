@@ -13,7 +13,7 @@ export class MouseDistanceConstraint {
     solve() {
         const c = this.mousePos.subtracted(this.particleA.positionX).length();
         const n = this.mousePos.subtracted(this.particleA.positionX).normalized();
-        const alpha = this.stiffness / this.config.dts; 
+        const alpha = this.stiffness / this.config.dts2; 
         const lambda = c / alpha;
 
         const correction = n.scaled(lambda);

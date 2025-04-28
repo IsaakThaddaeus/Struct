@@ -82,11 +82,11 @@ export class Editor {
                 break;
 
             case 'wheel':
-                this.config.createWheel(x, y, 50, 8, 0.01);
+                this.config.createWheel(x, y, 50, 8, 0.0002);
                 break;
 
             case 'spring':
-                this.handleConstraintClick(mousePos, 0.01);
+                this.handleConstraintClick(mousePos, 0.001);
                 break;
 
             case 'rod':
@@ -94,7 +94,7 @@ export class Editor {
                 break;
 
             case 'drag':
-                this.handleDragClick(mousePos);
+                this.handleDragClick(mousePos, 0.005);
                 break;
         }
     }
@@ -115,12 +115,12 @@ export class Editor {
         this.selectedParticle = null;
     }
 
-    handleDragClick(mousePos) {
+    handleDragClick(mousePos, stiffness) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 this.selectedParticle = particle;
-                this.config.addMouseDistanceConstraint(particle, mousePos, 0.3);
+                this.config.addMouseDistanceConstraint(particle, mousePos, stiffness);
                 return;
             }
         }
