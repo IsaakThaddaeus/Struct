@@ -86,7 +86,7 @@ export class Editor {
                 break;
 
             case 'spring':
-                this.handleConstraintClick(mousePos, 0.001, 10);
+                this.handleConstraintClick(mousePos, 0.001, 20);
                 break;
 
             case 'rod':

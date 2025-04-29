@@ -11,18 +11,34 @@ export class DistanceConstraint {
     }
 
     solve() {
-        const distance = this.particleB.positionX.subtracted(this.particleA.positionX).length();
+        const x1 = this.particleA.positionX;
+        const x2 = this.particleB.positionX;
+        const x1n = this.particleA.positionP;
+        const x2n = this.particleB.positionP;
+
+        const deltaX = x2.subtracted(x1);
+        const distance = deltaX.length();
+        const n = deltaX.normalized();
+
         const c = distance - this.initialDistance;
-        const n = this.particleB.positionX.subtracted(this.particleA.positionX).normalized();
+
         const alpha = this.stiffness / this.config.dts2;
-        const lambda = c / (this.particleA.w + this.particleB.w + alpha);
+        const beta = this.config.dts2 * this.damping;
+        const gamma = (alpha * beta) / this.config.dts;
+
+        const deltaV = x2.subtracted(x2n).subtracted(x1.subtracted(x1n)); // (x2 - x2n) - (x1 - x1n)
+        const dampingTerm = gamma * n.dot(deltaV);
+
+        const denominator = (1 + gamma) * (this.particleA.w + this.particleB.w) + alpha;
+        const lambda = (-c - dampingTerm) / denominator;
+
 
         const correction = n.scaled(lambda);
         if (this.particleA.w !== 0)
-            this.particleA.positionX = this.particleA.positionX.added(correction.scaled(this.particleA.w));
+            this.particleA.positionX = this.particleA.positionX.subtracted(correction.scaled(this.particleA.w));
 
         if (this.particleB.w !== 0)
-            this.particleB.positionX = this.particleB.positionX.subtracted(correction.scaled(this.particleB.w));
+            this.particleB.positionX = this.particleB.positionX.added(correction.scaled(this.particleB.w));
     }
 
     draw(ctx) {
