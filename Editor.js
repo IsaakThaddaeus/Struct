@@ -86,11 +86,11 @@ export class Editor {
                 break;
 
             case 'spring':
-                this.handleConstraintClick(mousePos, 0.001);
+                this.handleConstraintClick(mousePos, 0.001, 10);
                 break;
 
             case 'rod':
-                this.handleConstraintClick(mousePos, 0);
+                this.handleConstraintClick(mousePos, 0, 0);
                 break;
 
             case 'drag':
@@ -99,12 +99,12 @@ export class Editor {
         }
     }
 
-    handleConstraintClick(mousePos, stiffness) {
+    handleConstraintClick(mousePos, stiffness, damping) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 if (this.selectedParticle && this.selectedParticle !== particle) {
-                    this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness);
+                    this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness, damping);
                     this.selectedParticle = null;
                 } else {
                     this.selectedParticle = particle;
