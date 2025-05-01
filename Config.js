@@ -40,8 +40,8 @@ export class Config {
     return constraint;
   }
 
-  addMouseDistanceConstraint(particle, mousePos, stiffness, color) {
-    const constraint = new MouseDistanceConstraint(particle, mousePos, stiffness, this, color);
+  addMouseDistanceConstraint(particle, mousePos, stiffness, damping, color) {
+    const constraint = new MouseDistanceConstraint(particle, mousePos, stiffness, damping, this, color);
     this.mouseConstraint = constraint;
     return constraint;
   }

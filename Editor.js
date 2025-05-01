@@ -94,7 +94,7 @@ export class Editor {
                 break;
 
             case 'drag':
-                this.handleDragClick(mousePos, 0.005);
+                this.handleDragClick(mousePos, 0.005, 20);
                 break;
         }
     }
@@ -115,12 +115,12 @@ export class Editor {
         this.selectedParticle = null;
     }
 
-    handleDragClick(mousePos, stiffness) {
+    handleDragClick(mousePos, stiffness, damping) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 this.selectedParticle = particle;
-                this.config.addMouseDistanceConstraint(particle, mousePos, stiffness);
+                this.config.addMouseDistanceConstraint(particle, mousePos, stiffness, damping);
                 return;
             }
         }
