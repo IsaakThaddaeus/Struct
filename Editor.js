@@ -1,9 +1,5 @@
-import { Particle } from './Particle.js';
-import { DistanceConstraint } from './Constraints/DistanceConstraint.js';
-import { MouseDistanceConstraint } from './Constraints/MouseDistanceConstraint.js';
 import { Vector2 } from './Vector2.js';
 import { SoundManager } from './SoundManager.js';
-
 
 export class Editor {
     constructor(config) {
@@ -11,6 +7,7 @@ export class Editor {
 
         this.mode = 'particle';
         this.selectedParticle = null;
+        this.soundManager = new SoundManager();
 
         this.initEventListeners();
         this.initButtonListeners();
@@ -60,8 +57,8 @@ export class Editor {
 
 
     setMode(mode) {
+        this.soundManager.playFingerSnap();
         this.mode = mode;
-        SoundManager.play('Sounds/FingerSnap.mp3');
         console.log("Switched mode to", mode);
     }
 
@@ -71,27 +68,27 @@ export class Editor {
         const y = event.clientY - rect.top;
         const mousePos = new Vector2(x, y);
 
-        
+
 
         switch (this.mode) {
             case 'particle':
                 this.config.addParticle(x, y);
-                SoundManager.play('Sounds/Pop.mp3');
+                this.soundManager.playPop();
                 break;
 
             case 'fixedParticle':
                 this.config.addParticle(x, y, 0, undefined, '#155FBF');
-                SoundManager.play('Sounds/Pop.mp3');
+                this.soundManager.playPop();
                 break;
 
             case 'box':
                 this.config.createBox2x2(x, y, 50, 0);
-                SoundManager.play('Sounds/Pop.mp3');
+                this.soundManager.playPop();
                 break;
 
             case 'wheel':
                 this.config.createWheel(x, y, 50, 8, 0.0002);
-                SoundManager.play('Sounds/Pop.mp3');
+                this.soundManager.playPop();
                 break;
 
             case 'spring':
@@ -151,7 +148,19 @@ export class Editor {
     onKeyDown(event) {
         if (event.code === 'Space') {
             event.preventDefault();
+    
+            const canvas = document.getElementById('simulationCanvas');
+    
+            if (this.config.paused) {
+                this.soundManager.playPlay();
+                canvas.style.backgroundColor = '#ffffff'; 
+            } else {
+                this.soundManager.playPause();
+                canvas.style.backgroundColor = '#f0f0f0';
+            }
+    
             this.config.paused = !this.config.paused;
         }
     }
+    
 }
