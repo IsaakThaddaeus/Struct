@@ -7,6 +7,8 @@ export class SoundManager {
         this.loadSound('select', 'Sounds/Select.mp3');
         this.loadSound('pause', 'Sounds/Pause.mp3');
         this.loadSound('play', 'Sounds/Play.mp3');
+        this.loadSound('spring', 'Sounds/Spring.mp3');
+        this.loadSound('springBackwards', 'Sounds/SpringBackwards.mp3');
     }
 
     async loadSound(name, url) {
@@ -43,5 +45,13 @@ export class SoundManager {
 
     playPlay() {
         this.play('play');
+    }
+
+    playSpring() {
+        this.play('spring');
+    }
+    
+    playSpringBackwards() {
+        this.play('springBackwards');
     }
 }

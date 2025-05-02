@@ -110,6 +110,7 @@ export class Editor {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 if (this.selectedParticle && this.selectedParticle !== particle) {
+                    this.soundManager.playSpring();
                     this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness, damping);
                     this.selectedParticle = null;
                 } else {
@@ -125,13 +126,20 @@ export class Editor {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
+                this.soundManager.playSpring();
                 this.selectedParticle = particle;
                 this.config.addMouseDistanceConstraint(particle, mousePos, stiffness, damping);
                 return;
             }
         }
+
+        if(this.config.mouseConstraint)
+            this.soundManager.playSpringBackwards();
+
         this.selectedParticle = null;
         this.config.mouseConstraint = null;
+
+        
     }
 
     handleMouseMove(event) {
