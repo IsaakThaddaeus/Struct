@@ -57,7 +57,7 @@ export class Editor {
 
 
     setMode(mode) {
-        this.soundManager.playFingerSnap();
+        this.soundManager.playSelect();
         this.mode = mode;
         console.log("Switched mode to", mode);
     }

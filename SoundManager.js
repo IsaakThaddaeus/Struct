@@ -4,7 +4,7 @@ export class SoundManager {
         this.buffers = {};
 
         this.loadSound('pop', 'Sounds/Pop.mp3');
-        this.loadSound('snap', 'Sounds/FingerSnap.mp3');
+        this.loadSound('select', 'Sounds/Select.mp3');
         this.loadSound('pause', 'Sounds/Pause.mp3');
         this.loadSound('play', 'Sounds/Play.mp3');
     }
@@ -33,8 +33,8 @@ export class SoundManager {
         this.play('pop');
     }
 
-    playFingerSnap() {
-        this.play('snap');
+    playSelect() {
+        this.play('select');
     }
 
     playPause() {
