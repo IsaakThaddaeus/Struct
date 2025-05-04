@@ -6,7 +6,7 @@ export class Editor {
         this.config = config;
 
         this.mode = 'particle';
-        this.selectedParticle = null;
+        this.constraintParticle = null;
         this.soundManager = new SoundManager();
 
         this.initEventListeners();
@@ -21,6 +21,7 @@ export class Editor {
     }
 
     initButtonListeners() {
+        document.getElementById('btn-select').addEventListener('click', () => this.setMode('select'));
         document.getElementById('btn-drag').addEventListener('click', () => this.setMode('drag'));
         document.getElementById('btn-particle').addEventListener('click', () => this.setMode('particle'));
         document.getElementById('btn-fixed-particle').addEventListener('click', () => this.setMode('fixedParticle'));
@@ -132,24 +133,45 @@ export class Editor {
             case 'drag':
                 this.handleDragClick(mousePos, 0.005, 15, '#16B4F2');
                 break;
+
+            case 'select':
+                this.selectParticleAt(mousePos);
+                break;
         }
     }
 
+    /*
+    selectParticleAt(mousePos) {
+        for (const particle of this.config.particles) {
+            const dist = particle.positionX.subtracted(mousePos).length();
+            if (dist < particle.radius) {
+                this.selectedParticle = particle;
+                console.log("Selected particle at", particle.positionX);
+                return particle;
+            }
+        }
+    
+        this.selectedParticle = null;
+        console.log("No particle selected.");
+        return null;
+    }
+        */
+    
     handleConstraintClick(mousePos, stiffness, damping, color) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
-                if (this.selectedParticle && this.selectedParticle !== particle) {
+                if (this.constraintParticle && this.constraintParticle !== particle) {
                     this.soundManager.playSpring();
-                    this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness, damping, color);
-                    this.selectedParticle = null;
+                    this.config.addDistanceConstraint(this.constraintParticle, particle, stiffness, damping, color);
+                    this.constraintParticle = null;
                 } else {
-                    this.selectedParticle = particle;
+                    this.constraintParticle = particle;
                 }
                 return;
             }
         }
-        this.selectedParticle = null;
+        this.constraintParticle = null;
     }
 
     handleDragClick(mousePos, stiffness, damping, color) {
@@ -157,7 +179,7 @@ export class Editor {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 this.soundManager.playSpring();
-                this.selectedParticle = particle;
+                this.constraintParticle = particle;
                 this.config.addMouseDistanceConstraint(particle, mousePos, stiffness, damping, color);
                 return;
             }
@@ -166,10 +188,8 @@ export class Editor {
         if(this.config.mouseConstraint)
             this.soundManager.playSpringBackwards();
 
-        this.selectedParticle = null;
-        this.config.mouseConstraint = null;
-
-        
+        this.constraintParticle = null;
+        this.config.mouseConstraint = null;   
     }
 
     handleMouseMove(event) {
