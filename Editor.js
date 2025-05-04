@@ -73,14 +73,14 @@ export class Editor {
     }
 
     updateMuSP() {
-        const v = parseFloat(this.inputMuSP.value);
+        const v = parseFloat(this.inputMuSp.value);
         if (!isNaN(v) && v >= 0) {
             this.config.muSp = v;
         }
     }
 
     updateMuKP() {
-        const v = parseFloat(this.inputMuKP.value);
+        const v = parseFloat(this.inputMuKp.value);
         if (!isNaN(v) && v >= 0) {
             this.config.muKp = v;
         }
