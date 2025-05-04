@@ -15,7 +15,6 @@ export class SceneBuilder {
     config.createRope(200, 150, 20, 30);
     config.createWheel(300, 250, 55, 8, 0.01);
     config.createWheel(1100, 200, 55, 8, 0.01);
-    // config.createBalloon(1100, 400, 50, 7, 0.1);
 
     const points = [
       new Vector2(0, 0),
