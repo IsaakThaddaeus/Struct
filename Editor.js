@@ -21,7 +21,6 @@ export class Editor {
     }
 
     initButtonListeners() {
-        document.getElementById('btn-select').addEventListener('click', () => this.setMode('select'));
         document.getElementById('btn-drag').addEventListener('click', () => this.setMode('drag'));
         document.getElementById('btn-particle').addEventListener('click', () => this.setMode('particle'));
         document.getElementById('btn-fixed-particle').addEventListener('click', () => this.setMode('fixedParticle'));
@@ -134,29 +133,9 @@ export class Editor {
                 this.handleDragClick(mousePos, 0.005, 15, '#16B4F2');
                 break;
 
-            case 'select':
-                this.selectParticleAt(mousePos);
-                break;
         }
     }
 
-    /*
-    selectParticleAt(mousePos) {
-        for (const particle of this.config.particles) {
-            const dist = particle.positionX.subtracted(mousePos).length();
-            if (dist < particle.radius) {
-                this.selectedParticle = particle;
-                console.log("Selected particle at", particle.positionX);
-                return particle;
-            }
-        }
-    
-        this.selectedParticle = null;
-        console.log("No particle selected.");
-        return null;
-    }
-        */
-    
     handleConstraintClick(mousePos, stiffness, damping, color) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
