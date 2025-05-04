@@ -33,12 +33,21 @@ export class Editor {
     initInputs() {
         this.inputSubsteps = document.getElementById('substeps');
         this.inputGravity = document.getElementById('gravity');
+        this.inputMuEnv = document.getElementById('muEnv');
+        this.inputMuSp  = document.getElementById('muSp');
+        this.inputMuKp  = document.getElementById('muKp');
 
         this.inputSubsteps.value = this.config.substeps;
         this.inputGravity.value = this.config.gravity.y.toFixed(2);
+        this.inputMuEnv.value = this.config.mu?.toFixed(2)  ?? '0.00';
+        this.inputMuSp.value  = this.config.muSp?.toFixed(2) ?? '0.00';
+        this.inputMuKp.value  = this.config.muKp?.toFixed(2) ?? '0.00';
 
         this.inputSubsteps.addEventListener('input', () => this.updateSubsteps());
         this.inputGravity.addEventListener('input', () => this.updateGravity());
+        this.inputMuEnv.addEventListener('input', () => this.updateMuEnv());
+        this.inputMuSp.addEventListener('input', () => this.updateMuSP());
+        this.inputMuKp.addEventListener('input', () => this.updateMuKP());
     }
 
     updateSubsteps() {
@@ -52,6 +61,27 @@ export class Editor {
         const value = parseFloat(this.inputGravity.value);
         if (!isNaN(value)) {
             this.config.gravity.y = value;
+        }
+    }
+
+    updateMuEnv() {
+        const v = parseFloat(this.inputMuEnv.value);
+        if (!isNaN(v) && v >= 0) {
+            this.config.mu = v;
+        }
+    }
+
+    updateMuSP() {
+        const v = parseFloat(this.inputMuSP.value);
+        if (!isNaN(v) && v >= 0) {
+            this.config.muSp = v;
+        }
+    }
+
+    updateMuKP() {
+        const v = parseFloat(this.inputMuKP.value);
+        if (!isNaN(v) && v >= 0) {
+            this.config.muKp = v;
         }
     }
 
