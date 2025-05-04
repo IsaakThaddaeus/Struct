@@ -92,7 +92,7 @@ export class Editor {
                 break;
 
             case 'spring':
-                this.handleConstraintClick(mousePos, 0.001, 20);
+                this.handleConstraintClick(mousePos, 0.001, 15, '#16B4F2');
                 break;
 
             case 'rod':
@@ -100,18 +100,18 @@ export class Editor {
                 break;
 
             case 'drag':
-                this.handleDragClick(mousePos, 0.005, 20);
+                this.handleDragClick(mousePos, 0.005, 15, '#16B4F2');
                 break;
         }
     }
 
-    handleConstraintClick(mousePos, stiffness, damping) {
+    handleConstraintClick(mousePos, stiffness, damping, color) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 if (this.selectedParticle && this.selectedParticle !== particle) {
                     this.soundManager.playSpring();
-                    this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness, damping);
+                    this.config.addDistanceConstraint(this.selectedParticle, particle, stiffness, damping, color);
                     this.selectedParticle = null;
                 } else {
                     this.selectedParticle = particle;
@@ -122,13 +122,13 @@ export class Editor {
         this.selectedParticle = null;
     }
 
-    handleDragClick(mousePos, stiffness, damping) {
+    handleDragClick(mousePos, stiffness, damping, color) {
         for (const particle of this.config.particles) {
             const dist = particle.positionX.subtracted(mousePos).length();
             if (dist < particle.radius) {
                 this.soundManager.playSpring();
                 this.selectedParticle = particle;
-                this.config.addMouseDistanceConstraint(particle, mousePos, stiffness, damping);
+                this.config.addMouseDistanceConstraint(particle, mousePos, stiffness, damping, color);
                 return;
             }
         }

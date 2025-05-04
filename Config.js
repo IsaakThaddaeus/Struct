@@ -108,19 +108,18 @@ export class Config {
       const px = x + Math.cos(angle) * radius;
       const py = y + Math.sin(angle) * radius;
       const p = this.addParticle(px, py);
-      p.color = '#16B4F2';
       wheelParticles.push(p);
     }
 
     for (let i = 0; i < segments; i++) {
       const p1 = wheelParticles[i];
       const p2 = wheelParticles[(i + 1) % segments];
-      this.addDistanceConstraint(p1, p2, stiffness);
+      this.addDistanceConstraint(p1, p2, stiffness, undefined, '#16B4F2');
     }
 
     const center = this.addParticle(x, y); // fixed center
     for (const p of wheelParticles) {
-      this.addDistanceConstraint(center, p, stiffness);
+      this.addDistanceConstraint(center, p, stiffness, undefined, '#16B4F2');
     }
   }
 
